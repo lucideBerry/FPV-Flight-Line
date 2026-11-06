@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>FPV Flight Line</title>
+<title>FPV Flight Line: Drone Flight Animation Generator</title>
 <meta name="description" content="FPV Flight Line for Blender: click a few waypoints and get a full freestyle FPV drone flight with banking, power loops, flips, dives and gates, filmed by an FPV camera, a chase camera and spotter cameras.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,6 +40,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--ring); outline-
 h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; }
 h1 { font-size: clamp(52px, 10.5vw, 92px); font-weight: 800; font-stretch: 88%; line-height: 0.9; letter-spacing: -0.01em; }
 h2 { font-size: clamp(30px, 5.2vw, 44px); font-weight: 760; font-stretch: 90%; line-height: 1.02; }
+h1 .sub { display: block; margin-top: 14px; font-size: clamp(20px, 3.4vw, 28px); font-weight: 650; font-stretch: 92%; line-height: 1.1; letter-spacing: 0; color: var(--ring); }
 h3 { font-size: 18px; font-weight: 700; font-stretch: 95%; line-height: 1.2; }
 p { margin: 0; }
 .copy { color: var(--mute); max-width: 60ch; }
@@ -213,7 +214,7 @@ footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--rule);
 
   <header class="hero">
     <p class="maker">Blender add-on by LarkLab</p>
-    <h1>FPV Flight Line</h1>
+    <h1>FPV Flight Line<span class="sub">Drone Flight Animation Generator</span></h1>
     <p class="lede">Click a few points on your scene and get a <b>complete freestyle FPV flight</b>: banking, punch-outs, power loops, flips, dives and gates, flown around your geometry and filmed by its own cameras.</p>
     <div class="frame">
       <video class="lazy" data-src="media/hero.mp4" poster="media/hero.webp" muted loop playsinline preload="none" aria-label="FPV camera view of the drone diving through a ring over water and passing a chimney in the Ruin District test scene"></video>
@@ -417,18 +418,18 @@ footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--rule);
       <h2 id="s8">Details</h2>
     </div>
     <dl class="specs">
-      <div><dt>Blender</dt><dd>5.2 or newer, tested on 5.2.2 LTS (Windows 11)</dd></div>
+      <div><dt>Blender</dt><dd>5.0 or newer</dd></div>
       <div><dt>Type</dt><dd>Blender extension (add-on)</dd></div>
       <div><dt>Where</dt><dd>Flight Line tab in the 3D Viewport sidebar (N)</dd></div>
       <div><dt>Output</dt><dd>Keyframes on the drone and cameras, timeline markers for cuts</dd></div>
       <div><dt>Scale</dt><dd>Scenes in meters</dd></div>
       <div><dt>Flights</dt><dd>One flight rig per scene</dd></div>
-      <div><dt>Version</dt><dd>1.5.0</dd></div>
+      <div><dt>Version</dt><dd>1.0.0</dd></div>
       <div><dt>License</dt><dd>GPL-3.0-or-later</dd></div>
     </dl>
     <div class="pair">
       <p><b>Want the goggle look?</b> FPV Feed, our separate add-on, adds signal breakup and a live flight OSD to any render, with telemetry baked from your camera.</p>
-      <a href="https://lucideberry.github.io/FPV-Feed-Drone-Camera-FX-Live-OSD/github-pages/" target="_blank" rel="noopener">See FPV Feed</a>
+      <a href="https://superhivemarket.com/products/fpv-feed-drone-camera-fx--live-osd" target="_top" rel="noopener">See FPV Feed</a>
     </div>
   </section>
 
