@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FPV Flight Line Docs</title>
+<meta name="description" content="Documentation for FPV Flight Line, the Blender add-on that turns clicked waypoints into a freestyle FPV drone flight.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  --paper: #ffffff; --panel: #f4f6f8; --line: #e3e7ec; --ink: #0f1217; --mute: #5b6370;
+  --screen: #0d0f13; --acc: #2f6bff; --osd: #f2f5f7;
+  --ramp: linear-gradient(90deg, #4080ff, #26d9f2 30%, #59f273 55%, #ffcc33 78%, #ff4d33);
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --pixel: "FPV OSD", "Courier New", monospace;
+  --r-lg: 18px; --r-md: 12px;
+  color-scheme: light;
+}
+@font-face { font-family: "FPV OSD"; src: url("media/FPV_OSD.ttf") format("truetype"); font-display: swap; }
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.65 var(--body); -webkit-font-smoothing: antialiased; }
+.page { max-width: 1080px; margin: 0 auto; padding: 28px 16px 64px; display: grid; gap: 72px; }
+h1, h2, h3 { font-family: var(--display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+h1 { font-size: clamp(42px, 8vw, 80px); font-weight: 800; font-stretch: 118%; line-height: .95; }
+h2 { font-size: clamp(28px, 4.2vw, 40px); font-weight: 760; font-stretch: 112%; line-height: 1.05; }
+h3 { font-size: 19px; font-weight: 700; font-stretch: 105%; line-height: 1.25; }
+p { margin: 0; }
+a { color: var(--ink); text-decoration-color: var(--acc); text-underline-offset: 3px; }
+.eyebrow { font-family: var(--pixel); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 10px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--acc); box-shadow: 0 0 0 4px rgba(47,107,255,.15); }
+.lede { font-size: 19px; color: var(--mute); max-width: 62ch; }
+.copy { color: var(--mute); max-width: 68ch; }
+.copy b, .lede b, li b, td b { color: var(--ink); font-weight: 600; }
+section { display: grid; gap: 22px; scroll-margin-top: 16px; }
+.head { display: grid; gap: 12px; }
+.hero { display: grid; gap: 18px; }
+.hero .ramp { width: 220px; height: 6px; border-radius: 3px; background: var(--ramp); }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { font-family: var(--pixel); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; color: var(--mute); }
+.toc { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; }
+.toc a { background: var(--paper); padding: 14px 18px; text-decoration: none; display: flex; gap: 12px; align-items: baseline; }
+.toc a span { font-family: var(--pixel); font-size: 12px; color: var(--acc); }
+.toc a:hover { background: var(--panel); }
+@media (max-width: 500px) { .toc { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: start; }
+.steps li::before { content: counter(s); width: 40px; height: 40px; border-radius: 12px; background: var(--acc); color: #fff; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-stretch: 115%; font-size: 20px; }
+.steps li div { padding-top: 7px; color: var(--mute); }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(200px, 300px); gap: 28px 40px; align-items: start; }
+.two.wide { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+@media (max-width: 600px) { .two, .two.wide { grid-template-columns: 1fr; } }
+figure { margin: 0; display: grid; gap: 8px; }
+figure img { width: 100%; height: auto; display: block; border-radius: var(--r-md); background: var(--screen); border: 1px solid var(--line); }
+figcaption { font-family: var(--pixel); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+.side-img { max-width: 300px; }
+table { width: 100%; border-collapse: collapse; font-size: 15px; }
+th { text-align: left; font-family: var(--pixel); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); font-weight: 400; padding: 10px 12px; border-bottom: 1px solid var(--ink); }
+td { padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--mute); }
+td:first-child { color: var(--ink); font-weight: 600; white-space: nowrap; }
+.tbl { border: 1px solid var(--line); border-radius: var(--r-lg); overflow-x: auto; }
+.tbl table td:first-child, .tbl table th:first-child { padding-left: 18px; }
+.tbl tr:last-child td { border-bottom: 0; }
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.cards.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 600px) { .cards, .cards.four { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 440px) { .cards, .cards.four { grid-template-columns: 1fr; } }
+.card { border: 1px solid var(--line); border-radius: var(--r-lg); padding: 18px; display: grid; gap: 8px; align-content: start; background: var(--paper); }
+.card p { color: var(--mute); font-size: 15px; }
+.card img { width: 100%; border-radius: 10px; display: block; aspect-ratio: 16/9; object-fit: cover; }
+.card .n { font-family: var(--pixel); font-size: 11px; color: var(--acc); letter-spacing: .1em; }
+.note { border-left: 3px solid var(--acc); background: var(--panel); border-radius: 0 var(--r-md) var(--r-md) 0; padding: 14px 18px; color: var(--mute); }
+.note b { color: var(--ink); }
+code, kbd { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: .9em; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; color: var(--ink); }
+pre { margin: 0; background: var(--screen); color: var(--osd); border-radius: var(--r-md); padding: 18px 20px; overflow-x: auto; font: 13.5px/1.6 ui-monospace, "Cascadia Mono", Consolas, monospace; }
+ul.plain { margin: 0; padding-left: 20px; color: var(--mute); display: grid; gap: 6px; }
+.foot { border-top: 1px solid var(--line); padding-top: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; color: var(--mute); font-size: 14px; }
+.framed, .framed body { overflow: hidden; scrollbar-width: none; }
+.framed::-webkit-scrollbar, .framed body::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+<main class="page">
+
+<header class="hero">
+  <span class="eyebrow"><i class="dot"></i>Documentation / v1.0.0</span>
+  <h1>FPV Flight Line docs</h1>
+  <div class="ramp"></div>
+  <p class="lede">Everything you need to turn a few clicked waypoints into a freestyle FPV drone flight: install, the first flight in one minute, routes, ready-made shots, following a subject, every move, the pilot, cameras and fixes. The add-on lives in the <b>Flight Line</b> tab of the 3D Viewport sidebar.</p>
+  <div class="meta"><span class="pill">Blender 5.0+</span><span class="pill">Extension zip</span><span class="pill">Renders without the add-on</span><span class="pill">by LarkLab</span></div>
+</header>
+
+<nav class="toc" aria-label="Contents">
+  <a href="#install"><span>01</span>Install &amp; update</a>
+  <a href="#quick"><span>02</span>First flight</a>
+  <a href="#route"><span>03</span>Building a route</a>
+  <a href="#shots"><span>04</span>Ready-made shots</a>
+  <a href="#follow"><span>05</span>Follow Subject</a>
+  <a href="#moves"><span>06</span>Moves</a>
+  <a href="#direct"><span>07</span>Timing &amp; aim</a>
+  <a href="#pilot"><span>08</span>Pilot &amp; physics</a>
+  <a href="#cams"><span>09</span>Cameras</a>
+  <a href="#line"><span>10</span>Line &amp; drone</a>
+  <a href="#trouble"><span>11</span>Troubleshooting</a>
+  <a href="#limits"><span>12</span>Limits &amp; support</a>
+</nav>
+
+<section id="install">
+  <div class="head"><span class="eyebrow"><i class="dot"></i>01</span><h2>Install, update, remove</h2></div>
+  <ol class="steps">
+    <li><div>Download <code>fpv_flightline-1.0.0.zip</code> from your Superhive downloads. Don't unzip it.</div></li>
+    <li><div>In Blender open <b>Edit &rsaquo; Preferences &rsaquo; Get Extensions</b>, open the small arrow menu at the top right and choose <b>Install from Disk&hellip;</b>, then pick the zip. Dragging the zip onto the Blender window works too.</div></li>
+    <li><div>The add-on is enabled straight away. In the 3D Viewport press <kbd>N</kbd> and open the <b>Flight Line</b> tab.</div></li>
+  </ol>
+  <div class="two wide">
+    <div class="copy"><b>Update:</b> install the new zip the same way. Your flights are stored in the .blend as ordinary objects and keyframes, so they stay as they are.</div>
+    <div class="copy"><b>Remove from a scene:</b> <b>Reset Flight Line</b> at the bottom of the main panel deletes the drone, cameras, route and animation after you confirm. <b>Uninstall</b> in Preferences; your files keep rendering, because the flight is plain keyframes.</div>
+  </div>
+  <p class="copy">Command line, for example on a render node: <code>blender --command extension install-file -r user_default -e fpv_flightline-1.0.0.zip</code>. Render nodes don't need it at all: the file renders without the add-on.</p>
+</section>
+
+<section id="quick">
+  <div class="head"><span class="eyebrow"><i class="dot"></i>02</span><h2>Your first flight in one minute</h2></div>
+  <div class="two">
+    <div style="display:grid;gap:18px">
+      <ol class="steps">
+        <li><div><b>New Flight.</b> Press it in the Flight Line tab. The mouse pointer becomes a crosshair.</div></li>
+        <li><div><b>Click the start.</b> Click on your scene where the drone should start. The drone, its FPV camera and a chase camera appear there.</div></li>
+        <li><div><b>Click where it flies.</b> The drone flies the route straight away. Keep clicking to add more points.</div></li>
+        <li><div><b>Finish.</b> Press <kbd>Enter</kbd> (Esc or right-click also finish). <kbd>Ctrl</kbd>+<kbd>Z</kbd> inside the tool removes the last point.</div></li>
+        <li><div><b>Watch.</b> Under <b>Watch</b>, press <b>FPV</b> or <b>Chase</b> and play the timeline.</div></li>
+      </ol>
+      <div class="note"><b>Everything updates live:</b> move a waypoint, change its move or a pilot setting, and the flight is flown again a moment later. Turn off the refresh button next to <b>Fly Route</b> to stop that on very heavy scenes.</div>
+      <p class="copy">If you finish after only one click, a second point is added 15 m ahead in the direction you were looking.</p>
+    </div>
+    <div style="display:grid;gap:16px">
+      <figure class="side-img"><img src="img/welcome.jpg" alt="Start a flight box in the Flight Line panel" loading="lazy" width="558" height="360"><figcaption>Step 1: New Flight</figcaption></figure>
+      <figure class="side-img"><img src="img/panel.jpg" alt="The Flight Line panel with pilot style, Fly Route, Watch and Route" loading="lazy" width="372" height="1660"><figcaption>The Flight Line tab</figcaption></figure>
+    </div>
+  </div>
+  <figure><img src="img/viewport_gap.jpg" alt="Blender viewport with the live flight line threading two rings" loading="lazy" width="1200" height="681"><figcaption>The live flight line threading two rings</figcaption></figure>
+</section>
+
+<section id="route">
+  <div class="head"><span class="eyebrow"><i class="dot"></i>03</span><h2>Building a route</h2>
+    <p class="copy"><b>Click to Place</b> adds points with the mouse. While it's active, the header shows the keys.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Action</th><th>Adds</th></tr></thead>
+    <tbody>
+      <tr><td>Click</td><td>A waypoint at <b>Point Height</b> over the clicked surface.</td></tr>
+      <tr><td>Shift + click</td><td>A race gate standing on the clicked spot, facing the direction of travel.</td></tr>
+      <tr><td>Ctrl + click</td><td>A proximity skim, 0.5 m from the surface, flown very close.</td></tr>
+      <tr><td>Alt + click</td><td>A gap: finds the opening near the click (a window, a doorway, the space between two buildings) and threads straight through it.</td></tr>
+      <tr><td>Backspace / Ctrl+Z</td><td>Removes the last waypoint you placed.</td></tr>
+      <tr><td>Enter, Esc, right-click</td><td>Done.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="cards">
+    <div class="card"><span class="n">AHEAD</span><h3>Next point along the arrow</h3><p>Adds a waypoint after the active one. At the end of the route it goes 15 m along the waypoint's arrow, stopping short of walls. Rotate the arrow (<kbd>R</kbd> <kbd>Z</kbd>) to aim it. In the middle of a route it goes halfway to the next point.</p></div>
+    <div class="card"><span class="n">GAP</span><h3>Gap From Selection</h3><p>Select one object with a hole in it, or two objects with a space between them. The waypoint is placed in the opening and flown straight through.</p></div>
+    <div class="card"><span class="n">EDIT</span><h3>Plain objects</h3><p>Move waypoints with <kbd>G</kbd> and snapping. In the list, the arrows reorder, X deletes and the arrow-down button drops a point onto the surface below it.</p></div>
+  </div>
+  <p class="copy"><b>Route From Curve</b> (Route panel) turns the selected curve into a route with a waypoint every few meters. Draw the line with the curve tools or reuse a path you already have.</p>
+</section>
+
+<section id="shots">
+  <div class="head"><span class="eyebrow"><i class="dot"></i>04</span><h2>15 ready-made shots</h2>
+    <p class="copy">Select an object and press <b>Add Shot</b> (welcome screen or Route panel). The shot is sized to the object and approached from your current view. It's built from normal waypoints and moves, so you can edit it, and it keeps clear of your scene like any route. This replaces the current route.</p></div>
+  <div class="cards four">
+    <div class="card"><img src="img/s_orbit.jpg" alt="" loading="lazy"><span class="n">REVEALS</span><h3>Rising Orbit</h3></div>
+    <div class="card"><img src="img/s_loop.jpg" alt="" loading="lazy"><span class="n">TRICKS</span><h3>Power Loop Over</h3></div>
+    <div class="card"><img src="img/s_crest.jpg" alt="" loading="lazy"><span class="n">REVEALS</span><h3>Crest Reveal</h3></div>
+    <div class="card"><img src="img/s_valley.jpg" alt="" loading="lazy"><span class="n">SPACES</span><h3>Valley Run</h3></div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Group</th><th>Shots</th></tr></thead>
+    <tbody>
+      <tr><td>Reveals</td><td><b>Orbit Reveal</b> (fly in, circle once, fly out), <b>Rising Orbit</b> (spiral up around it), <b>Descending Vortex</b> (spiral down from above), <b>Punch-In Reveal</b> (race in low, climb over it), <b>Crest Reveal</b> (climb the face and skim over the top edge), <b>Dive Reveal</b> (over the top and down the far side).</td></tr>
+      <tr><td>Fly-bys</td><td><b>Fly-By</b> (pass alongside, turning to keep it in view), <b>Parallax Fly-By</b> (low and close, looking ahead), <b>Roll Pass</b> (a roll right beside it).</td></tr>
+      <tr><td>Tricks</td><td><b>Power Loop Over</b>, <b>Split-S Drop</b>, <b>Flip Over</b>, <b>Orbit Break-Out</b> (circle it, then break away at speed).</td></tr>
+      <tr><td>Spaces</td><td><b>Doorway Entry</b> (finds the door, window or arch in the object and flies through it), <b>Valley Run</b> (low and fast across terrain, following its surface).</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="follow">
+  <div class="head"><span class="eyebrow"><i class="dot"></i>05</span><h2>Follow Subject</h2>
+    <p class="copy">Film anything that moves: a car, a character, a bird. Open the <b>Follow Subject</b> panel, pick the <b>Subject</b>, a <b>Follow Style</b> and press <b>Follow Subject</b>.</p></div>
+  <div class="two wide">
+    <div class="tbl"><table>
+      <thead><tr><th>Style</th><th>Where the drone flies</th></tr></thead>
+      <tbody>
+        <tr><td>Tail Chase</td><td>Right behind the subject, a little above it.</td></tr>
+        <tr><td>Low Chase</td><td>Low and close behind, just above the ground.</td></tr>
+        <tr><td>High Follow</td><td>Higher and further back, showing the surroundings.</td></tr>
+        <tr><td>Side Pace</td><td>Alongside the subject, matching its speed.</td></tr>
+        <tr><td>Overtake</td><td>Starts behind, passes it and flies on ahead.</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="plain">
+      <li><b>Behind</b>, <b>Side</b> and <b>Height</b> set the distance. Behind is measured along the subject's path, so the gap holds through bends.</li>
+      <li><b>Point Every</b> is the time between the waypoints made along the path. Shorter follows twisty motion more closely.</li>
+      <li>Each point is pinned to the subject's frame (Arrive at Frame) and the subject becomes a look target, so the camera stays on it.</li>
+      <li>If the subject is faster than the pilot's Top Speed, Top Speed is raised to keep up.</li>
+      <li>The subject and its children are not obstacles, so the drone doesn't dodge the car itself.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="moves">
+  <div class="head"><span class="eyebrow"><i class="dot"></i>06</span><h2>Moves</h2>
+    <p class="copy">Select a waypoint and pick its move under <b>Selected Point</b>. Moves that need room are measured against your scene: if one doesn't fit it is flown smaller, and with no room at all the drone flies straight through and the panel tells you which waypoint it was.</p></div>
+  <figure><img src="img/moves.jpg" alt="The move menu: Fly Through, Loops and Dives, Throttle Cut, Circle" loading="lazy" width="800" height="200" style="max-width:640px"><figcaption>The move menu</figcaption></figure>
+  <div class="tbl"><table>
+    <thead><tr><th>Move</th><th>What the drone does</th><th>Size</th></tr></thead>
+    <tbody>
+      <tr><td>Pass</td><td>Flies through the point.</td><td></td></tr>
+      <tr><td>Race Gate</td><td>Flies straight through a gate placed at the waypoint.</td><td></td></tr>
+      <tr><td>Gap</td><td>Threads straight through an opening along the waypoint's arrow.</td><td></td></tr>
+      <tr><td>Proximity Skim</td><td>Flies very close past the nearest surface.</td><td></td></tr>
+      <tr><td>Power Loop</td><td>A full vertical loop that starts at the waypoint and goes up and over.</td><td>Loop radius</td></tr>
+      <tr><td>Split-S</td><td>Rolls inverted and pulls down, coming back the other way lower.</td><td>Radius</td></tr>
+      <tr><td>Dive</td><td>Rolls over the edge, dives straight down, pulls out at the bottom.</td><td>Depth</td></tr>
+      <tr><td>Reversal</td><td>Half loop up and roll upright, coming back the other way higher.</td><td>Radius</td></tr>
+      <tr><td>Roll</td><td>Throttle cut, 360&deg; roll, punch out.</td><td>Turns</td></tr>
+      <tr><td>Flip</td><td>Throttle cut, 360&deg; flip (Right = backflip, Left = front flip).</td><td>Turns</td></tr>
+      <tr><td>Yaw Spin</td><td>Floating flat 360&deg; spin.</td><td>Turns</td></tr>
+      <tr><td>Orbit</td><td>Circles the waypoint, optionally looking at it.</td><td>Radius, turns</td></tr>
+      <tr><td>Corkscrew</td><td>Spirals up around the waypoint, for trees, pillars and towers.</td><td>Radius, turns, climb</td></tr>
+    </tbody>
+  </table></div>
+  <p class="copy">Every waypoint also has <b>Speed</b> (0 uses cruise speed), <b>Direction: Use Arrow</b> (gates and gaps always do) and <b>Wall Distance</b> (0 uses the pilot's).</p>
+</section>
+
+<section id="direct">
+  <div class="head"><span class="eyebrow"><i class="dot"></i>07</span><h2>Timing and aim</h2></div>
+  <div class="two wide">
+    <div style="display:grid;gap:10px"><h3>Arrive at Frame</h3><p class="copy">Tick it on any waypoint and type a frame: the drone passes that point on exactly that frame, for music cues and edit points. The speeds before it are solved to fit, easing smoothly between pinned points. Pin the first point to choose the frame the flight starts on. If a pin needs more speed than Top Speed allows, the panel says which point and how fast.</p></div>
+    <div style="display:grid;gap:10px"><h3>Look Targets</h3><p class="copy">The nose and FPV camera turn toward objects you choose: a statue on a fly-by, a car, a doorway. <b>Add Look Target</b> uses the selected objects, or adds a target at the 3D cursor. Several targets blend by strength; moving targets are followed frame by frame.</p></div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Look target setting</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td>Strength</td><td>1 keeps the camera on the target, 0.5 is a glance.</td></tr>
+      <tr><td>Notice Distance</td><td>The drone starts turning toward the target from this distance.</td></tr>
+      <tr><td>Lock Distance</td><td>Closer than this, the camera stays on the target at full strength.</td></tr>
+      <tr><td>Release Angle</td><td>Let go once the target is this far behind the flight direction.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><b>Like a real quad:</b> a drone can only turn its nose around its thrust, so a target turns the heading. The camera's height in the picture still comes from the tilt and the camera uptilt.</div>
+</section>
+
+<section id="pilot">
+  <div class="head"><span class="eyebrow"><i class="dot"></i>08</span><h2>Pilot and physics</h2>
+    <p class="copy"><b>Pilot Style</b>, the four buttons at the top of the panel, sets everything at once. Changing a setting below switches to Custom; press a style to go back. With the <b>?</b> button on, each group explains itself.</p></div>
+  <div class="cards four">
+    <div class="card"><span class="n">01</span><h3>Smooth</h3><p>Flowing lines and soft, confident turns. The best all-round look.</p></div>
+    <div class="card"><span class="n">02</span><h3>Aggressive</h3><p>A little faster and punchier, with harder banks.</p></div>
+    <div class="card"><span class="n">03</span><h3>Parkour</h3><p>Slower and tight to every surface.</p></div>
+    <div class="card"><span class="n">04</span><h3>Cinematic</h3><p>Slow and gentle, for reveals and walkthroughs.</p></div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Setting</th><th>Meaning</th><th>Group</th></tr></thead>
+    <tbody>
+      <tr><td>Cruise / Top Speed</td><td>Speed between points; fastest the drone can fly, which also sets how far it leans forward.</td><td>Speed</td></tr>
+      <tr><td>Rates</td><td>Fastest rotation in &deg;/s, also the speed of rolls and flips. Freestyle pilots use about 500&ndash;1000.</td><td>Handling</td></tr>
+      <tr><td>Stick Response</td><td>How quickly the drone follows the pilot; 0.05&ndash;0.1 s feels like a tuned quad.</td><td>Handling</td></tr>
+      <tr><td>Line Smoothing</td><td>Rounds off the line. Lower is sharper.</td><td>Handling</td></tr>
+      <tr><td>Look at Next Point</td><td>How much the nose and FPV camera aim at the next point or gate ahead of time.</td><td>Eyes</td></tr>
+      <tr><td>Look Ahead</td><td>How early the nose turns into the next part of the line.</td><td>Eyes</td></tr>
+      <tr><td>Motor Power</td><td>Thrust to weight. A typical 5-inch freestyle quad is 5 to 8.</td><td>Power</td></tr>
+      <tr><td>Turn Strength</td><td>How much power the pilot uses in turns, and how far it may bank outside tricks.</td><td>Power</td></tr>
+      <tr><td>Wall Distance</td><td>Distance kept from your scene.</td><td>Safety</td></tr>
+      <tr><td>Camera Shake / Propwash</td><td>Stick corrections and turbulence; the wobble when punching out through its own wash. <b>Shake Variation</b> gives a new shake on the same line.</td><td>Shake</td></tr>
+      <tr><td>Start / End</td><td>Already Flying or From Hover; Keep Flying or Stop. <b>Fit Timeline</b> sets the frame range to the flight.</td><td>Start &amp; End</td></tr>
+    </tbody>
+  </table></div>
+  <div class="cards">
+    <div class="card"><h3>Tilt from thrust</h3><p>A quad pushes only along its own up axis, so it leans into every acceleration, leans forward against drag, and goes inverted when the line pulls down harder than gravity.</p></div>
+    <div class="card"><h3>Speed from the motors</h3><p>Slower in tight corners and climbs, faster in dives, and it can't brake harder than its motors allow.</p></div>
+    <div class="card"><h3>Stays clear</h3><p>The route keeps its distance from your geometry and finds a way around walls between waypoints. The same settings always give the same flight.</p></div>
+  </div>
+</section>
+
+<section id="cams">
+  <div class="head"><span class="eyebrow"><i class="dot"></i>09</span><h2>Cameras and auto cuts</h2></div>
+  <div class="cards">
+    <div class="card"><img src="img/c_fpv.jpg" alt="" loading="lazy"><span class="n">FPV</span><h3>FPV camera</h3><p><b>Camera Uptilt</b> (pilots use 20&ndash;40&deg;), <b>FPV Field of View</b> and <b>Speed Widening</b>, which opens the lens as the drone speeds up.</p></div>
+    <div class="card"><img src="img/c_chase.jpg" alt="" loading="lazy"><span class="n">CHASE</span><h3>Third person</h3><p><b>Chase</b>, <b>Wide Follow</b> or <b>Top Chase</b>, with Distance, Height, Lag, Speed Zoom and Bank. It backs off during tricks so the whole move stays in frame.</p></div>
+    <div class="card"><img src="img/c_spot.jpg" alt="" loading="lazy"><span class="n">SPOTTERS</span><h3>Spotters and cuts</h3><p><b>Place Spotter Cameras</b> puts a camera on the ground near each move. <b>Auto Cuts</b> switches between all cameras with timeline markers. <b>Cuts</b> does both in one click.</p></div>
+  </div>
+  <p class="copy">Under <b>Watch</b>, the FPV, Chase and Cuts buttons switch the camera you look through and render with.</p>
+</section>
+
+<section id="line">
+  <div class="head"><span class="eyebrow"><i class="dot"></i>10</span><h2>Flight line and drone</h2></div>
+  <div class="two wide">
+    <div style="display:grid;gap:12px">
+      <h3>Flight line display</h3>
+      <ul class="plain">
+        <li>Drawn in the viewport only, never rendered. It is the exact path of the drone's animation.</li>
+        <li><b>Color:</b> Speed (blue slow, red fastest), Moves (orange tricks, pink throttle cut) or Plain.</li>
+        <li><b>Highlight Ahead:</b> the next seconds are drawn bright, the part already flown is dimmed.</li>
+        <li><b>Second Marks:</b> a dot for every second, handy for timing.</li>
+        <li><b>In Camera View:</b> also draw it through a camera, like a racing line in FPV.</li>
+      </ul>
+    </div>
+    <div style="display:grid;gap:12px">
+      <h3>Drone</h3>
+      <ul class="plain">
+        <li><b>Built-in Drone:</b> a 5-inch freestyle quad with props and prop blur that follow the throttle. <b>Drone Size</b> and <b>Accent Color</b>.</li>
+        <li><b>Use Selected as Drone:</b> any object you choose. Front +Y, top +Z, origin at its center.</li>
+        <li><b>Your Props:</b> objects in this collection spin around their own Z with the throttle.</li>
+        <li>The drone carries <code>fl_speed</code>, <code>fl_throttle</code> and <code>fl_altitude</code>, keyed every frame, for drivers.</li>
+      </ul>
+    </div>
+  </div>
+  <figure><img src="img/route.jpg" alt="Rendered flight path through nine rings with a power loop" loading="lazy" width="1200" height="600"><figcaption>The flown path, rendered as a line: nine rings, a power loop and a roll</figcaption></figure>
+  <p class="copy">Everything lives in the <b>Flight Line</b> collection: <code>FL Drone</code>, <code>FL FPV Camera</code>, <code>FL Chase Camera</code>, the <code>FL Route</code> collection with the waypoints and gates, and <code>FL Spotters</code>.</p>
+</section>
+
+<section id="trouble">
+  <div class="head"><span class="eyebrow"><i class="dot"></i>11</span><h2>Troubleshooting</h2></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Symptom</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td>No Flight Line tab</td><td>Press <kbd>N</kbd> in the 3D Viewport; check the add-on is enabled in Preferences.</td></tr>
+      <tr><td>A trick was flown straight through</td><td>There was no room for it. The panel names the waypoint; move it into open space or make the move smaller.</td></tr>
+      <tr><td>The flight doesn't update</td><td>The refresh button next to Fly Route is off; turn it on or press <b>Fly Route</b>.</td></tr>
+      <tr><td>The drone ignores a moved wall</td><td>Live updates reuse the last scan. Press <b>Fly Route</b> after big scene changes.</td></tr>
+      <tr><td>Far too fast or too slow</td><td>The scene isn't in meters. Scale the speeds and sizes with it.</td></tr>
+      <tr><td>"&hellip;needs about X km/h"</td><td>An Arrive at Frame pin is too early for Top Speed. Move the frame later or raise Top Speed.</td></tr>
+      <tr><td>The gap misses the opening</td><td>Select only the object with the hole (or the two objects around the space) before Gap From Selection.</td></tr>
+      <tr><td>Flight line not in the render</td><td>By design: it's a viewport guide. Render the FPV or chase camera.</td></tr>
+      <tr><td>Camera looks at the sky</td><td>Lower <b>Camera Uptilt</b>, or use Look Targets to aim the nose.</td></tr>
+      <tr><td>Want to start over</td><td><b>Reset Flight Line</b>, confirm, then <b>New Flight</b>.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="limits">
+  <div class="head"><span class="eyebrow"><i class="dot"></i>12</span><h2>Known limits and support</h2></div>
+  <div class="two wide">
+    <ul class="plain">
+      <li>One flight rig per scene.</li>
+      <li>Very large scenes (millions of faces) take a few seconds to scan on Fly Route.</li>
+      <li>Prop spin is limited to the built-in drone and the objects in <b>Your Props</b>.</li>
+      <li>Scenes are assumed to be in meters.</li>
+      <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> works on everything the add-on does. After an undo the restored flight is kept; if it doesn't match the waypoints, it is flown again a moment later.</li>
+    </ul>
+    <div style="display:grid;gap:14px;align-content:start">
+      <p class="copy">Questions, bugs or a feature request? Contact <b>LarkLab</b> through Superhive. Include your Blender version, operating system and, if you can, the .blend.</p>
+      <p><a href="https://superhivemarket.com/creators/larklab" target="_blank" rel="noopener">superhivemarket.com/creators/larklab</a></p>
+      <pre>import bpy
+scene = bpy.context.scene
+scene.flightline.style = "CINEMATIC"
+bpy.ops.flightline.shot(shot="RISING_ORBIT")
+bpy.ops.flightline.spotters()</pre>
+    </div>
+  </div>
+</section>
+
+<footer class="foot"><span>FPV Flight Line 1.0.0 / Blender 5.0+</span><span>by LarkLab</span></footer>
+</main>
+<script>
+(function () {
+  var framed = true;
+  try { framed = window.self !== window.top; } catch (e) {}
+  if (!framed) return;
+  var root = document.documentElement;
+  root.classList.add("framed");
+  function fit() { var w = window.innerWidth; root.style.zoom = w < 832 && w > 400 ? String(w / 832) : ""; }
+  fit();
+  window.addEventListener("resize", fit);
+})();
+</script>
+</body>
+</html>
